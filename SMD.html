@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="SMDstyles.css">
+    <title>ENTNT Ship Maintenance Dashboard</title>
+   
+</head>
+<body>
+    
+    <div id="app">
+        <!-- Login Page (shown by default) -->
+        <div id="login-page" class="container">
+            <div class="card" style="max-width: 400px; margin: 50px auto;">
+                <h1 class="text-center mb-20">Ship Maintenance Dashboard</h1>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <div id="login-error" class="error hidden"></div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Main App (hidden by default) -->
+        <div id="main-app" class="hidden">
+            <header>
+                <div class="logo">ENTNT Ship Maintenance</div>
+                <div class="user-info">
+                    <span id="current-user-role"></span>
+                    <button id="logout-btn" class="logout-btn">Logout</button>
+                </div>
+            </header>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link active" data-page="dashboard">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" data-page="ships">Ships</a></li>
+                    <li><a href="#" class="nav-link" data-page="jobs">Maintenance Jobs</a></li>
+                    <li><a href="#" class="nav-link" data-page="calendar">Calendar</a></li>
+                    <li><a href="#" class="nav-link" data-page="notifications">Notifications</a></li>
+                </ul>
+            </nav>
+            
+            <div class="container">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page">
+                    <h2 class="mb-20">Dashboard</h2>
+                    
+                    <div class="grid mb-20">
+                        <div class="kpi-card" style="background-color: #3498db;">
+                            <h3>Total Ships</h3>
+                            <p id="total-ships">0</p>
+                        </div>
+                        <div class="kpi-card" style="background-color: #e74c3c;">
+                            <h3>Overdue Components</h3>
+                            <p id="overdue-components">0</p>
+                        </div>
+                        <div class="kpi-card" style="background-color: #f39c12;">
+                            <h3>Jobs in Progress</h3>
+                            <p id="jobs-in-progress">0</p>
+                        </div>
+                        <div class="kpi-card" style="background-color: #2ecc71;">
+                            <h3>Jobs Completed</h3>
+                            <p id="jobs-completed">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="mb-20">Recent Maintenance Jobs</h3>
+                        <table id="recent-jobs-table">
+                            <thead>
+                                <tr>
+                                    <th>Job ID</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Scheduled Date</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Ships Page -->
+                <div id="ships-page" class="page hidden">
+                    <div class="flex-between mb-20">
+                        <h2>Ships Management</h2>
+                        <button id="add-ship-btn" class="btn btn-primary">Add New Ship</button>
+                    </div>
+                    
+                    <div class="card">
+                        <table id="ships-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>IMO Number</th>
+                                    <th>Flag</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Ship Detail Page -->
+                <div id="ship-detail-page" class="page hidden">
+                    <button id="back-to-ships-btn" class="btn btn-secondary mb-20">Back to Ships</button>
+                    <h2 id="ship-detail-name" class="mb-20"></h2>
+                    
+                    <div class="grid">
+                        <div class="card">
+                            <h3 class="mb-20">General Information</h3>
+                            <div class="ship-info">
+                                <p><strong>IMO Number:</strong> <span id="ship-imo"></span></p>
+                                <p><strong>Flag:</strong> <span id="ship-flag"></span></p>
+                                <p><strong>Status:</strong> <span id="ship-status"></span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="flex-between mb-20">
+                                <h3>Components</h3>
+                                <button id="add-component-btn" class="btn btn-primary">Add Component</button>
+                            </div>
+                            <table id="components-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Serial Number</th>
+                                        <th>Installation Date</th>
+                                        <th>Last Maintenance</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-20">
+                        <h3 class="mb-20">Maintenance History</h3>
+                        <table id="ship-jobs-table">
+                            <thead>
+                                <tr>
+                                    <th>Job ID</th>
+                                    <th>Component</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Scheduled Date</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Jobs Page -->
+                <div id="jobs-page" class="page hidden">
+                    <div class="flex-between mb-20">
+                        <h2>Maintenance Jobs</h2>
+                        <button id="add-job-btn" class="btn btn-primary">Create New Job</button>
+                    </div>
+                    
+                    <div class="card">
+                        <table id="jobs-table">
+                            <thead>
+                                <tr>
+                                    <th>Job ID</th>
+                                    <th>Ship</th>
+                                    <th>Component</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Assigned Engineer</th>
+                                    <th>Scheduled Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Calendar Page -->
+                <div id="calendar-page" class="page hidden">
+                    <h2 class="mb-20">Maintenance Calendar</h2>
+                    
+                    <div class="card">
+                        <div class="flex-between mb-20">
+                            <h3 id="current-month-year">May 2025</h3>
+                            <div>
+                                <button id="prev-month-btn" class="btn btn-secondary">Previous</button>
+                                <button id="next-month-btn" class="btn btn-secondary">Next</button>
+                            </div>
+                        </div>
+                        
+                        <div class="calendar">
+                            <div class="calendar-header">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                            </div>
+                            <div id="calendar-grid" class="calendar-grid"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notifications Page -->
+                <div id="notifications-page" class="page hidden">
+                    <h2 class="mb-20">Notifications</h2>
+                    
+                    <div class="card">
+                        <div id="notifications-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add Ship Modal -->
+        <div id="add-ship-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add New Ship</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="add-ship-form">
+                    <div class="form-group">
+                        <label for="ship-name">Name</label>
+                        <input type="text" id="ship-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ship-imo">IMO Number</label>
+                        <input type="text" id="ship-imo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ship-flag">Flag</label>
+                        <input type="text" id="ship-flag" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ship-status">Status</label>
+                        <select id="ship-status" required>
+                            <option value="Active">Active</option>
+                            <option value="Under Maintenance">Under Maintenance</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Edit Ship Modal -->
+        <div id="edit-ship-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Ship</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="edit-ship-form">
+                    <input type="hidden" id="edit-ship-id">
+                    <div class="form-group">
+                        <label for="edit-ship-name">Name</label>
+                        <input type="text" id="edit-ship-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-ship-imo">IMO Number</label>
+                        <input type="text" id="edit-ship-imo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-ship-flag">Flag</label>
+                        <input type="text" id="edit-ship-flag" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-ship-status">Status</label>
+                        <select id="edit-ship-status" required>
+                            <option value="Active">Active</option>
+                            <option value="Under Maintenance">Under Maintenance</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Add Component Modal -->
+        <div id="add-component-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add New Component</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="add-component-form">
+                    <input type="hidden" id="component-ship-id">
+                    <div class="form-group">
+                        <label for="component-name">Name</label>
+                        <input type="text" id="component-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="component-serial">Serial Number</label>
+                        <input type="text" id="component-serial" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="component-install-date">Installation Date</label>
+                        <input type="date" id="component-install-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="component-last-maintenance">Last Maintenance Date</label>
+                        <input type="date" id="component-last-maintenance" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Add Job Modal -->
+        <div id="add-job-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Create Maintenance Job</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="add-job-form">
+                    <div class="form-group">
+                        <label for="job-component">Component</label>
+                        <select id="job-component" required>
+                            <option value="">Select Component</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-type">Type</label>
+                        <select id="job-type" required>
+                            <option value="Inspection">Inspection</option>
+                            <option value="Repair">Repair</option>
+                            <option value="Replacement">Replacement</option>
+                            <option value="Upgrade">Upgrade</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-priority">Priority</label>
+                        <select id="job-priority" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-status">Status</label>
+                        <select id="job-status" required>
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-engineer">Assigned Engineer</label>
+                        <select id="job-engineer" required>
+                            <option value="">Select Engineer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-scheduled-date">Scheduled Date</label>
+                        <input type="date" id="job-scheduled-date" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Update Job Status Modal -->
+        <div id="update-job-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Update Job Status</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="update-job-form">
+                    <input type="hidden" id="update-job-id">
+                    <div class="form-group">
+                        <label for="update-job-status">Status</label>
+                        <select id="update-job-status" required>
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Day Jobs Modal -->
+        <div id="day-jobs-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="day-jobs-title">Jobs on May 5, 2025</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div id="day-jobs-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="SMDjavascript.js"></script>
+</body>
+</html>
